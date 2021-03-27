@@ -1,3 +1,5 @@
+# File: SushiFork.py
+
 """
 Chrome is maximized, no toolbar, scrolled down 3 clicks so that there is
 a hair of whitespace between the blue bar (games>strategy>sushi) and the 
@@ -19,8 +21,8 @@ import win32.lib.win32con as win32con   #so i aliased them here to be consistent
 def screenGrab():
     box = (x_pad + 1,y_pad + 1,800 + x_pad , 599 + y_pad)
     im = ImageGrab.grab(bbox=box)    #DEVIANT: the tutorial said "ImageGrab.grab(box)" instead
-    im.save(os.getcwd() + '\\full_snap__' + str(int(time.time())) +
-'.png', 'PNG')
+    #im.save(os.getcwd() + '\\full_snap__' + str(int(time.time())) + '.png', 'PNG')
+    return im
 
 def leftClick():
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
@@ -105,13 +107,13 @@ def clearTables():
 def makeFood(food):
     if food == 'caliroll':
         print("making a caliroll")
-        setCoords(Coord.f_rice)
+        setCoords(Coord["f_rice"])
         leftClick()
         time.sleep(.05)
-        setCoords(Coord.f_nori)
+        setCoords(Coord["f_nori"])
         leftClick()
         time.sleep(.05)
-        setCoords(Coord.f_roe)
+        setCoords(Coord["f_roe"])
         leftClick()
         time.sleep(.05)
         foldMat()
@@ -119,13 +121,13 @@ def makeFood(food):
 
     elif food == 'onigiri':
         print ('making an onigiri')
-        setCoords(Coord.f_rice)
+        setCoords(Coord["f_rice"])
         leftClick()
         time.sleep(.05)
-        setCoords(Coord.f_rice)
+        setCoords(Coord["f_rice"])
         leftClick()
         time.sleep(.05)
-        setCoords(Coord.f_nori)
+        setCoords(Coord["f_nori"])
         leftClick()
         time.sleep(.05)
         foldMat()
@@ -133,115 +135,114 @@ def makeFood(food):
 
     elif food == 'gunkan':
         print ('making a gunkan')
-        setCoords(Coord.f_rice)
+        setCoords(Coord["f_rice"])
         leftClick()
         time.sleep(.05)
-        setCoords(Coord.f_nori)
+        setCoords(Coord["f_nori"])
         leftClick()
         time.sleep(.05)
-        setCoords(Coord.f_roe)
+        setCoords(Coord["f_roe"])
         leftClick()
         time.sleep(.05)
-        setCoords(Coord.f_roe)
+        setCoords(Coord["f_roe"])
         leftClick()
         time.sleep(.05)
         foldMat()
         time.sleep(1.5)
 
 def buyFood(food):
-    setCoords(Coord.phone)
+    setCoords(Coord["phone"])
+    print('test1111')
 
-    setCoords(Coord.menu_toppings)
+    if food == 'rice':
+        leftClick()
+        setCoords(Coord["menu_rice"])
+        time.sleep(0.1)
+        leftClick()
+        s = screenGrab()
+        if (s.getpixel(Coord["buy_rice"]) != (118, 83, 85)):
+            print ('rice is available')
+            setCoords(Coord["buy_rice"])
+            time.sleep(0.1)
+            leftClick()
+            setCoords(Coord["delivery_normal"])
+            time.sleep(0.1)
+            leftClick()
+            time.sleep(2.5)
 
-    setCoords(Coord.t_shrimp)
-    setCoords(Coord.t_nori)
-    setCoords(Coord.t_roe)
-    setCoords(Coord.t_salmon)
-    setCoords(Coord.t_unagi)
-    setCoords(Coord.t_exit)   #still need to scrape this coord!
+           
+        else:
+            print ('rice is NOT available')
+            setCoords(Coord["t_exit"])
+            leftClick()
+            time.sleep(1)
+            buyFood(food)
+           
 
-    setCoords(Coord.menu_rice)
-    setCoords(Coord.buy_rice)
+    else:
+        leftClick()
+        setCoords(Coord["menu_toppings"])
+        leftClick()
+        time.sleep(1)       #might need to change this
+        s = screenGrab()
+        print ('test')
+        time.sleep(1)
+        t_food = "t_" + food        #create a string to pass to setCoords of the form t_toppings
+        if s.getpixel(Coord[t_food])  != (Color[t_food]):
+            print ((t_food) + "is available")
+            setCoords(Coord[t_food])
+            time.sleep(1)
+            leftClick()
+            setCoords(Coord["delivery_normal"])
+            time.sleep(1)
+            leftClick()
+            time.sleep(2)
+        else:
+            print (t_food + "is NOT available")
+            setCoords(Coord["t_exit"])
+            leftClick()
+            time.sleep(1)
+            buyFood(food)
 
-    setCoords(Coord.delivery_normal)
 
 
-class Coord:
-    f_shrimp = (40, 280)
-    f_rice = (90, 290)
-    f_nori = (35, 350)
-    f_roe = (85, 350)
-    f_salmon = (34, 401)
-    f_unagi = (90, 400)
+Coord = {
+    "f_shrimp": (40, 280),
+    "f_rice": (90, 290),
+    "f_nori": (35, 350),
+    "f_roe": (85, 350),
+    "f_salmon": (34, 401),
+    "f_unagi": (90, 400),
 
-    mat = (206, 343)
+    "mat": (206, 343),
 
     #########################
 
-    phone = (550, 315)
+    "phone": (550, 315),
 
-    menu_toppings = (505, 235)
+    "menu_toppings":(505, 235),
 
-    t_shrimp = (490, 180)   #  _t  prefix indicates that this item is 
-    t_nori = (478, 235)      #  in the toppings menu (when buying on phone)
-    t_roe = (570, 240)
-    t_salmon = (485, 290)
-    t_unagi = (565, 180)
+    "t_shrimp": (490, 180),   #  _t  prefix indicates that this item is 
+    "t_nori": (478, 235),     #  in the toppings menu (when buying on phone)
+    "t_roe": (570, 240),
+    "t_salmon": (485, 290),
+    "t_unagi": (565, 180),
 
-    menu_rice = (513, 255)
-    buy_rice = (513, 255)
+    "t_exit": (584, 301),
+    "menu_rice": (513, 255),
+    "buy_rice": (513, 245),
+    
+    "delivery_normal": (485, 255),  #express is (590,255), but shouldnt be needed
+}
 
-    delivery_normal = (485, 255)  #express is (590,255), but shouldnt be needed
+Color = {
+    "t_shrimp": (255, 250, 208),
+    "t_nori": (238, 219, 169),
+    "t_roe": (202, 55, 25),
+    "t_salmon": (0, 0, 0),
+    "t_unagi": (240, 41, 41),
+
+    "buy_rice": (238, 219, 169),
+}
 
 
-"""
->>> getCoords()#phoneTopping
-506 233
->>> getCoords()#phoneRice
-513 255
->>> getCoords()#phoneSake
-500 281
->>> getCoords()#sushi mat
-206 343
->>> startGame()
-click
-click
-click
-click
-click
->>> getCoords()#plate1
-80 161
->>> getCoords()#2
-180 165
->>> getCoords()#3
-280 166
->>> getCoords()#4
-382 161
->>> getCoords()#5
-477 162
->>> getCoords()#6
-592 168
->>> getCoords()
-579 169
-
->>> getCoords()#shrimp
-487 168
->>> getCoords()
-490 181
->>> getCoords()#beef
-567 180
->>> getCoords()#nori
-478 235
->>> getCoords()#roe
-568 242
->>> getCoords()#salmon
-485 291
->>> getCoords()#rice menu
-517 256
->>> #rice has the same coords
->>> getCoords()#delivery: free
-483 254
->>> getCoords()#delivery: express
-587 255
->>> 
-"""
