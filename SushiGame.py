@@ -49,11 +49,20 @@ def getCoords():
     x = x - x_pad
     y = y - y_pad
     print(x,y)
+    tupler = (x,y)
+    return tupler 
 
 def foldMat():
     setCoords((200,350))
-    leftClick
     time.sleep(0.1)
+    leftClick()
+    time.sleep(0.1)
+
+def convertCoords(Coords):        #to be used with the im and getpixel functions
+    x = Coords[0] + 135       #the getcoord and setcoord do this on their own
+    y = Coords[1] + 114
+    finalTuple = (x,y)
+    return finalTuple
 
 def main():
     pass
@@ -159,8 +168,12 @@ def buyFood(food):
         setCoords(Coord["menu_rice"])
         time.sleep(0.1)
         leftClick()
+        setCoords(Coord["buy_rice"])
+        time.sleep(0.2)
         s = screenGrab()
-        if (s.getpixel(Coord["buy_rice"]) != (118, 83, 85)):
+        print(s.getpixel((650,350)))  #
+        print(s.getpixel(convertCoords(Coord["buy_rice"])))
+        if (s.getpixel(convertCoords(Coord["buy_rice"])) != (118, 83, 85)):
             print ('rice is available')
             setCoords(Coord["buy_rice"])
             time.sleep(0.1)
@@ -188,7 +201,7 @@ def buyFood(food):
         print ('test')
         time.sleep(1)
         t_food = "t_" + food        #create a string to pass to setCoords of the form t_toppings
-        if s.getpixel(Coord[t_food])  != (Color[t_food]):
+        if s.getpixel(convertCoords(Coord[t_food]))  != color:
             print ((t_food) + "is available")
             setCoords(Coord[t_food])
             time.sleep(1)
@@ -222,11 +235,11 @@ Coord = {
 
     "menu_toppings":(505, 235),
 
-    "t_shrimp": (490, 180),   #  _t  prefix indicates that this item is 
-    "t_nori": (478, 235),     #  in the toppings menu (when buying on phone)
-    "t_roe": (570, 240),
-    "t_salmon": (485, 290),
-    "t_unagi": (565, 180),
+    "t_shrimp": (520, 170),   #  _t  prefix indicates that this item is 
+    "t_nori": (516, 228),     #  in the toppings menu (when buying on phone)
+    "t_roe": (547, 230),
+    "t_salmon": (516, 284),
+    "t_unagi": (540, 180),
 
     "t_exit": (584, 301),
     "menu_rice": (513, 255),
@@ -245,4 +258,4 @@ Color = {
     "buy_rice": (238, 219, 169),
 }
 
-
+color = (109, 123, 127)
