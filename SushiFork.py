@@ -101,26 +101,6 @@ def clearTables():
         leftClick()                 #since the last coord has an x-value of 592
     print("all tables clear!")
 
-"""
-    setCoords((80,161))
-    leftClick()
-
-    setCoords((180,165))
-    leftClick()
-
-    setCoords((280,166))
-    leftClick()
-
-    setCoords((380,166))
-    leftClick()
- 
-    setCoords((480,166))
-    leftClick()
-
-    setCoords((592,168))
-    leftClick()
-"""
-
 def makeFood(food):
     print("making a " + food)
     for i in range(len(Recipes[food])):
@@ -132,51 +112,6 @@ def makeFood(food):
 
 
 
-if food == 'caliroll':
-        print("making a caliroll")
-        setCoords(Coord["f_rice"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_nori"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_roe"])
-        leftClick()
-        time.sleep(.05)
-        foldMat()
-        time.sleep(1.5)
-
-    elif food == 'onigiri':
-        print ('making an onigiri')
-        setCoords(Coord["f_rice"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_rice"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_nori"])
-        leftClick()
-        time.sleep(.05)
-        foldMat()
-        time.sleep(1.5)
-
-    elif food == 'gunkan':
-        print ('making a gunkan')
-        setCoords(Coord["f_rice"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_nori"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_roe"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_roe"])
-        leftClick()
-        time.sleep(.05)
-        foldMat()
-        time.sleep(1.5)
-    
 
 def buyFood(food):
     setCoords(Coord["phone"])
@@ -281,7 +216,10 @@ Recipes = {
     "caliroll": ("rice", "nori", "roe")
     "gunkan": ("rice", "nori", "roe", "roe")
     "nori": ("rice", "rice", "nori")
-    "shrimp": ("rice", "rice", "nori", "shrimp")
+    "shrimp_roll": ("rice", "rice", "nori", "shrimp")
+    "salmon_roll": ("rice", "rice", "nori", "salmon")
+    "unagi_roll": ("rice", "rice", "nori", "unagi")
+    
 
 }
 
