@@ -6,9 +6,9 @@ a hair of whitespace between the blue bar (games>strategy>sushi) and the
 tabs bar/url.  Im also using an adblocker, and have the chrome tab with 
 the game on the left of a split single screen
 """
-#Globals
-x_pad = 22
-y_pad = 233
+#Global      these are the offsets of the top-left corner
+x_pad = 22   
+y_pad = 233  
 
 from numpy import *          #fun wildcard import indicated by the star
 from PIL import ImageGrab
@@ -61,7 +61,7 @@ def foldMat():
 def convertCoords(Coords):        #to be used with the im and getpixel functions
     x = Coords[0] + 135       #the getcoord and setcoord do this on their own
     y = Coords[1] + 114
-    finalTuple = (x,y)
+    finalTuple = ((x,y))
     return finalTuple
 
 def main():
@@ -95,69 +95,21 @@ def startGame():
 
 
 def clearTables():
-    setCoords((80,161))
-    leftClick()
 
-    setCoords((180,165))
-    leftClick()
-
-    setCoords((280,166))
-    leftClick()
-
-    setCoords((380,166))
-    leftClick()
- 
-    setCoords((480,166))
-    leftClick()
-
-    setCoords((592,168))
-    leftClick()
+    for i in range(6):
+        setCoords(((80 + (100*i) ), 166))   #might need to change the multiple of i to 101 or 102 
+        leftClick()                 #since the last coord has an x-value of 592
+    print("all tables clear!")
 
 def makeFood(food):
-    if food == 'caliroll':
-        print("making a caliroll")
-        setCoords(Coord["f_rice"])
+    print("making a " + food)
+    for i in range(len(Recipes[food])):
+        setCoords(Coord[Recipes[food][i]])   #this line probably needs work, not sure how
+        time.sleep(0.1)          #the nested indexing works (especially the bracket placement)
         leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_nori"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_roe"])
-        leftClick()
-        time.sleep(.05)
-        foldMat()
-        time.sleep(1.5)
+        time.sleep(0.1)
+        print("added " + Recipes[food][i])
 
-    elif food == 'onigiri':
-        print ('making an onigiri')
-        setCoords(Coord["f_rice"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_rice"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_nori"])
-        leftClick()
-        time.sleep(.05)
-        foldMat()
-        time.sleep(1.5)
-
-    elif food == 'gunkan':
-        print ('making a gunkan')
-        setCoords(Coord["f_rice"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_nori"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_roe"])
-        leftClick()
-        time.sleep(.05)
-        setCoords(Coord["f_roe"])
-        leftClick()
-        time.sleep(.05)
-        foldMat()
-        time.sleep(1.5)
 
 def buyFood(food):
     setCoords(Coord["phone"])
@@ -257,5 +209,17 @@ Color = {
 
     "buy_rice": (238, 219, 169),
 }
+
+Recipes = {
+    "caliroll": ("rice", "nori", "roe"),
+    "gunkan": ("rice", "nori", "roe", "roe"),
+    "nori": ("rice", "rice", "nori"),
+    "shrimp_roll": ("rice", "rice", "nori", "shrimp"),
+    "salmon_roll": ("rice", "rice", "nori", "salmon"),
+    "unagi_roll": ("rice", "rice", "nori", "unagi"),
+    
+
+}
+
 
 color = (109, 123, 127)
