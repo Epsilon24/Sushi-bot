@@ -64,6 +64,12 @@ def convertCoords(Coords):        #to be used with the im and getpixel functions
     finalTuple = ((x,y))
     return finalTuple
 
+def checkFood():
+    for i, j in foodOnHand.items():
+        if j <= 4:
+            print ("%s is low and needs to be resupplied") % i 
+            buyFood(i)
+
 def main():
     pass
  
@@ -104,12 +110,14 @@ def clearTables():
 def makeFood(food):
     print("making a " + food)
     for i in range(len(Recipes[food])):
-        setCoords(Coord[Recipes[food][i]])   #this line probably needs work, not sure how
-        time.sleep(0.1)          #the nested indexing works (especially the bracket placement)
+        temp = ([Recipes[food][i]])
+        setCoords(Coord["f_" + str(temp[0])])  #this line probably needs work, not sure how
+        time.sleep(0.1)          #the nested indexing works (especially the bracket placement) 
         leftClick()
         time.sleep(0.1)
         print("added " + Recipes[food][i])
-
+        foodOnHand[Recipes[food][i]] -= 1
+    foldMat()
 
 def buyFood(food):
     setCoords(Coord["phone"])
@@ -123,7 +131,6 @@ def buyFood(food):
         setCoords(Coord["buy_rice"])
         time.sleep(0.2)
         s = screenGrab()
-        print(s.getpixel((650,350)))  #
         print(s.getpixel(convertCoords(Coord["buy_rice"])))
         if (s.getpixel(convertCoords(Coord["buy_rice"])) != (118, 83, 85)):
             print ('rice is available')
@@ -133,7 +140,7 @@ def buyFood(food):
             setCoords(Coord["delivery_normal"])
             time.sleep(0.1)
             leftClick()
-            time.sleep(2.5)
+            foodOnHand["rice"] += 10
 
            
         else:
@@ -161,7 +168,11 @@ def buyFood(food):
             setCoords(Coord["delivery_normal"])
             time.sleep(1)
             leftClick()
-            time.sleep(2)
+            if (food == "unagi") or (food == "salmon") or (food == "shrimp"):
+                foodOnHand[food] += 5
+
+            else:
+                foodOnHand[food] += 10
         else:
             print (t_food + "is NOT available")
             setCoords(Coord["t_exit"])
@@ -213,12 +224,20 @@ Color = {
 Recipes = {
     "caliroll": ("rice", "nori", "roe"),
     "gunkan": ("rice", "nori", "roe", "roe"),
-    "nori": ("rice", "rice", "nori"),
+    "onigiri": ("rice", "rice", "nori"),
     "shrimp_roll": ("rice", "rice", "nori", "shrimp"),
     "salmon_roll": ("rice", "rice", "nori", "salmon"),
     "unagi_roll": ("rice", "rice", "nori", "unagi"),
     
+}
 
+foodOnHand = {
+    'shrimp':5,
+    'rice':10,
+    'nori':10,
+    'roe':10,
+    'salmon':5,
+    'unagi':5
 }
 
 
