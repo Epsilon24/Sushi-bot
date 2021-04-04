@@ -24,6 +24,14 @@ def screenGrab():
     #im.save(os.getcwd() + '\\full_snap__' + str(int(time.time())) + '.png', 'PNG')
     return im
 
+def Grab():
+    box = (x_pad + 1,y_pad + 1,800 + x_pad , 599 + y_pad)
+    im = ImageOps.grayscale(ImageGrab.grab(bbox=box))    #DEVIANT: the tutorial said "ImageGrab.grab(box)" instead
+    a = array(im.getcolors())
+    a = a.sum()
+    print (a)
+    return a
+
 def leftClick():
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
     time.sleep(.1)
@@ -69,6 +77,16 @@ def checkFood():
         if j <= 4:
             print ("%s is low and needs to be resupplied") % i 
             buyFood(i)
+
+def getOrder():
+    for i in range(6):
+        box = (orderLocations[i])
+        im = (ImageGrab.grab(bbox=box))
+        a = array(im.getcolors())
+        a = a.sum()
+        print (a)
+        im.save(os.getcwd() + "\\seat_" + str(i) + "__" + str(int(time.time())) + ".png", "PNG")
+        print ("good!")
 
 def main():
     pass
@@ -142,14 +160,12 @@ def buyFood(food):
             leftClick()
             foodOnHand["rice"] += 10
 
-           
         else:
             print ('rice is NOT available')
             setCoords(Coord["t_exit"])
             leftClick()
             time.sleep(1)
             buyFood(food)
-           
 
     else:
         leftClick()
@@ -238,6 +254,15 @@ foodOnHand = {
     'roe':10,
     'salmon':5,
     'unagi':5
+}
+
+orderLocations = {
+    0: (34, 86, 111, 103),  #define boxes, in format (topleft x, topleft y, bottomright x, bottomleft y)
+    1: (160, 86, 237, 103),
+    2: (286, 86, 363, 103),
+    3: (412, 86, 489, 103),
+    4: (539, 86, 616, 103),
+    5: (665, 86, 742, 103),
 }
 
 
